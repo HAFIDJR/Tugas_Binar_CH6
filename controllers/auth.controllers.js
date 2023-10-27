@@ -139,17 +139,17 @@ module.exports = {
   },
   authenticate: async (req, res, next) => {
     try {
-      const { id } = req.user;
+      const user = req.user;
       const profileUser = await prisma.userProfile.findUnique({
         where: {
-          userId: id,
+          userId: user.id,
         },
       });
       return res.status(200).json({
         status: true,
         message: "OK",
         err: null,
-        data: { user: profileUser },
+        data: { user: { ...profileUser, email : user.email  } },
       });
     } catch (error) {
       next(err);
